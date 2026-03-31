@@ -1,7 +1,9 @@
+'use client';
+
 import React, { useState, useMemo, useEffect, useRef } from 'react';
 import { Search, Filter, SortDesc, FileText, Database, BrainCircuit, Hash, Clock, X, Save, Bold, Italic, List, CheckCircle2 } from 'lucide-react';
-import { DOCS } from '../../data/initial';
-import { Doc } from '../../types';
+import { DOCS } from '@/data/initial';
+import { Doc } from '@/types';
 
 export function MemoryView() {
   const [docs, setDocs] = useState<Doc[]>(DOCS);

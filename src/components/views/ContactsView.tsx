@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useState, useMemo } from 'react';
 import { Search, Filter, Mail, MessageSquare, Clock, MapPin, Plus } from 'lucide-react';
 

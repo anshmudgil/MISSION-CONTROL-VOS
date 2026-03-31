@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useState } from 'react';
 import { Bot, Activity, CheckCircle, Clock, ChevronRight, X, Terminal, BarChart2, PenTool, Settings } from 'lucide-react';
 
