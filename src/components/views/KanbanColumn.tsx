@@ -1,7 +1,9 @@
+'use client';
+
 import React, { useMemo } from 'react';
 import { SortableContext, useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { Task } from '../../types';
+import { Task } from '@/types';
 import { KanbanCard } from './KanbanCard';
 import { Plus } from 'lucide-react';
 

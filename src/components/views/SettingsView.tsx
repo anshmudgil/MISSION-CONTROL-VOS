@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useState } from 'react';
 import { Settings, Sliders, Activity, CheckCircle, XCircle, AlertCircle, Github, Slack, Database, Globe, ShoppingBag, FileText, BarChart } from 'lucide-react';
 

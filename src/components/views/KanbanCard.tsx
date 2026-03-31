@@ -1,8 +1,10 @@
+'use client';
+
 import React from 'react';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { Task } from '../../types';
-import { cn } from '../../lib/utils';
+import { Task } from '@/types';
+import { cn } from '@/lib/utils';
 import { Edit2, Trash2, ArrowRightLeft, Calendar, Flag } from 'lucide-react';
 
 interface KanbanCardProps {

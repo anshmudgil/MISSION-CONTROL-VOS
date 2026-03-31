@@ -1,12 +1,14 @@
+'use client';
+
 import React, { useState } from 'react';
-import { 
-  DndContext, DragOverlay, closestCorners, KeyboardSensor, 
-  PointerSensor, useSensor, useSensors, DragStartEvent, 
+import {
+  DndContext, DragOverlay, closestCorners, KeyboardSensor,
+  PointerSensor, useSensor, useSensors, DragStartEvent,
   DragOverEvent, DragEndEvent
 } from '@dnd-kit/core';
 import { SortableContext, arrayMove, sortableKeyboardCoordinates } from '@dnd-kit/sortable';
-import { Task, Comment } from '../../types';
-import { INITIAL_TASKS } from '../../data/initial';
+import { Task, Comment } from '@/types';
+import { INITIAL_TASKS } from '@/data/initial';
 import { KanbanColumn } from './KanbanColumn';
 import { KanbanCard } from './KanbanCard';
 import { Plus, ChevronDown, Activity, X, Calendar, Flag, User, MessageSquare, Trash2 } from 'lucide-react';

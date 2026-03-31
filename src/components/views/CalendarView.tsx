@@ -1,7 +1,9 @@
+'use client';
+
 import React, { useState } from 'react';
 import { Calendar as CalendarIcon, ChevronLeft, ChevronRight, Clock, MoreHorizontal, X, Tag, AlignLeft } from 'lucide-react';
-import { CALENDAR_EVENTS } from '../../data/initial';
-import { CalendarEvent } from '../../types';
+import { CALENDAR_EVENTS } from '@/data/initial';
+import { CalendarEvent } from '@/types';
 
 export function CalendarView() {
   const [currentDate, setCurrentDate] = useState(new Date());
