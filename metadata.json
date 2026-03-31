@@ -1,0 +1,5 @@
+{
+  "name": "OpenClaw Mission Control",
+  "description": "Kanban dashboard for managing OpenClaw documents, memory, projects, and agents.",
+  "requestFramePermissions": []
+}
