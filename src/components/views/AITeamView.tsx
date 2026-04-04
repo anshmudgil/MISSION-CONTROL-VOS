@@ -1,7 +1,8 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Bot, Activity, CheckCircle, Clock, ChevronRight, X, Terminal, BarChart2, PenTool, Settings } from 'lucide-react';
+import { AgentRegistration } from '@/types';
 
 type AgentStatus = 'active' | 'idle' | 'error' | 'offline';
 
@@ -114,6 +115,23 @@ const StatusIndicator = ({ status }: { status: AgentStatus }) => {
 
 export function AITeamView() {
   const [selectedAgent, setSelectedAgent] = useState<Agent | null>(null);
+  const [liveStatuses, setLiveStatuses] = useState<Record<string, AgentRegistration>>({});
+
+  // Poll live agent status from ACP registry every 10s
+  useEffect(() => {
+    const poll = async () => {
+      try {
+        const res = await fetch('/api/acp/agents');
+        const agents: AgentRegistration[] = await res.json();
+        const map: Record<string, AgentRegistration> = {};
+        agents.forEach(a => { map[a.id] = a; });
+        setLiveStatuses(map);
+      } catch { /* ignore */ }
+    };
+    poll();
+    const interval = setInterval(poll, 10_000);
+    return () => clearInterval(interval);
+  }, []);
 
   const coreAgent = AGENTS.find(a => a.group === 'Core');
   const groups = ['Developers', 'Analysts', 'Writers', 'Operators'];
@@ -140,7 +158,7 @@ export function AITeamView() {
             {/* Core Agent (VELO) */}
             {coreAgent && (
               <div className="flex flex-col items-center relative z-10 mb-12">
-                <AgentCard agent={coreAgent} onClick={() => setSelectedAgent(coreAgent)} isSelected={selectedAgent?.id === coreAgent.id} />
+                <AgentCard agent={coreAgent} onClick={() => setSelectedAgent(coreAgent)} isSelected={selectedAgent?.id === coreAgent.id} liveStatus={liveStatuses['opencore']} />
                 {/* Vertical line down from VELO */}
                 <div className="w-px h-12 bg-border-strong absolute -bottom-12 left-1/2 -translate-x-1/2" />
               </div>
@@ -165,11 +183,12 @@ export function AITeamView() {
                     </div>
                     
                     {groupAgents.map(agent => (
-                      <AgentCard 
-                        key={agent.id} 
-                        agent={agent} 
-                        onClick={() => setSelectedAgent(agent)} 
-                        isSelected={selectedAgent?.id === agent.id} 
+                      <AgentCard
+                        key={agent.id}
+                        agent={agent}
+                        onClick={() => setSelectedAgent(agent)}
+                        isSelected={selectedAgent?.id === agent.id}
+                        liveStatus={liveStatuses[agent.id]}
                       />
                     ))}
                   </div>
@@ -270,13 +289,20 @@ export function AITeamView() {
   );
 }
 
-function AgentCard({ agent, onClick, isSelected }: { agent: Agent, onClick: () => void, isSelected: boolean }) {
+function AgentCard({ agent, onClick, isSelected, liveStatus }: {
+  agent: Agent;
+  onClick: () => void;
+  isSelected: boolean;
+  liveStatus?: AgentRegistration;
+}) {
+  const displayStatus: AgentStatus = (liveStatus?.status as AgentStatus) ?? agent.status;
+
   return (
-    <div 
+    <div
       onClick={onClick}
       className={`w-64 bg-bg-panel border rounded-xl p-4 flex flex-col gap-3 cursor-pointer transition-all duration-200 ${
-        isSelected 
-          ? 'border-accent shadow-elevation-card-hover ring-1 ring-accent/50' 
+        isSelected
+          ? 'border-accent shadow-elevation-card-hover ring-1 ring-accent/50'
           : 'border-border-base shadow-elevation-card-rest hover:border-border-strong hover:shadow-elevation-card-hover'
       }`}
     >
@@ -290,10 +316,15 @@ function AgentCard({ agent, onClick, isSelected }: { agent: Agent, onClick: () =
             <p className="text-xs text-text-muted">{agent.role}</p>
           </div>
         </div>
+        {liveStatus && (
+          <span className="text-[10px] font-mono text-text-muted bg-bg-subtle border border-border-base rounded px-1.5 py-0.5">
+            LIVE
+          </span>
+        )}
       </div>
-      
+
       <div className="pt-3 border-t border-border-base flex flex-col gap-2">
-        <StatusIndicator status={agent.status} />
+        <StatusIndicator status={displayStatus} />
         <p className="text-xs text-text-base line-clamp-1" title={agent.currentTask}>
           <span className="text-text-muted mr-1">Task:</span>
           {agent.currentTask}
