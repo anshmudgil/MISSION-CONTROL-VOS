@@ -1,0 +1,13 @@
+{
+  "name": "hermes-agent",
+  "version": "1.0.0",
+  "description": "Hermes relay agent for Mission Control VOS ACP",
+  "type": "module",
+  "scripts": {
+    "start": "node --experimental-strip-types index.ts",
+    "dev": "node --watch --experimental-strip-types index.ts"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.52.0"
+  }
+}
